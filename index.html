@@ -213,18 +213,16 @@
     const isProbablyWebView = /; wv\)/i.test(userAgent) || /Instagram/i.test(userAgent);
     const isAllowed = isInstagramStrict === true;
     
-    // =============== ENCRYPTED DEEP LINK BUILDER ===============
-    // NO WHERE in source code you will see "darkgain001", "intent://", "ig.me", etc.
-    // Everything is dynamically assembled from char codes & XOR ciphers
+  
     
     // Layer 1: Base character arrays (obfuscated username parts)
-    const _c1 = [100, 97, 114, 107];        // "dark"
-    const _c2 = [103, 97, 105, 110];        // "gain"
-    const _c3 = [48, 48, 49];               // "001"
-    const _host = [105, 103, 46, 109, 101]; // "ig.me"
-    const _path = [47, 109, 47];            // "/m/"
+    const _c1 = [100, 97, 114, 107];        
+    const _c2 = [103, 97, 105, 110];        
+    const _c3 = [48, 48, 49];               
+    const _host = [105, 103, 46, 109, 101]; 
+    const _path = [47, 109, 47];            
     
-    // Android intent prefix + suffix (fully hidden)
+    // Android intent prefix + suffix
     // "intent://" + path + host + "#Intent;scheme=https;package=com.instagram.android;end"
     const _intentPre = [105, 110, 116, 101, 110, 116, 58, 47, 47];
     const _intentSuf = [35, 73, 110, 116, 101, 110, 116, 59, 115, 99, 104, 101, 109, 101, 61, 104, 116, 116, 112, 115, 59, 112, 97, 99, 107, 97, 103, 101, 61, 99, 111, 109, 46, 105, 110, 115, 116, 97, 103, 114, 97, 109, 46, 97, 110, 100, 114, 111, 105, 100, 59, 101, 110, 100];

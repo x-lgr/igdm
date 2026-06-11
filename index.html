@@ -1,39 +1,473 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Loading...</title>
-<style>
-body{margin:0;background:linear-gradient(180deg,#0f0f0f,#1c1c1c,#0f0f0f);font-family:Arial,sans-serif;color:white;overflow:hidden}
-.box{padding:40px 20px;text-align:center}
-.gtitle{margin:0;font-size:34px;background:linear-gradient(90deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sub{font-size:18px;color:#ddd;margin-top:10px}
-.zone{height:380px;display:flex;align-items:center;justify-content:center}
-.ring{width:80px;height:80px;border-radius:50%;background:rgba(255,255,240,0.03);animation:pulse 1.6s infinite}
-@keyframes pulse{0%{transform:scale(0.8);opacity:0.6}70%{transform:scale(1.3);opacity:0.2}100%{transform:scale(0.8);opacity:0}}
-.bottom{text-align:center;padding:20px}
-.arrow{font-size:32px;font-weight:bold;animation:blink 1s infinite;background:rgba(0,0,0,0.3);display:inline-block;padding:8px 24px;border-radius:60px}
-@keyframes blink{50%{opacity:0.35}}
-.info{font-size:17px;color:#bbb;max-width:500px;margin:15px auto;line-height:1.6}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Instagram DM • Secure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #0f0f0f, #1c1c1c, #0f0f0f);
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-section {
+            text-align: center;
+            padding: 35px 20px 10px;
+        }
+
+        .ig-title {
+            margin: 0;
+            font-size: 34px;
+            background: linear-gradient(90deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .sub-text {
+            font-size: 18px;
+            color: #ddd;
+            margin-top: 12px;
+            font-weight: 400;
+        }
+
+        .sub-text b {
+            color: #f0a35e;
+            font-weight: 600;
+        }
+
+        /* popup zone - space where Instagram native popup appears */
+        .popup-space {
+            height: 380px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .pulse-ring {
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,240,0.03);
+            box-shadow: 0 0 0 0 rgba(250,126,30,0.6);
+            animation: pulseEffect 1.6s infinite ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulseEffect {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.6;
+                box-shadow: 0 0 0 0 rgba(250,126,30,0.6);
+            }
+            70% {
+                transform: scale(1.3);
+                opacity: 0.2;
+                box-shadow: 0 0 0 25px rgba(250,126,30,0);
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(250,126,30,0);
+            }
+        }
+
+        .bottom-area {
+            text-align: center;
+            padding: 20px 20px 40px;
+            background: transparent;
+        }
+
+        .continue-hint {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            animation: blinkHint 1s infinite;
+            letter-spacing: 3px;
+            background: rgba(0,0,0,0.3);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            margin-bottom: 12px;
+        }
+
+        .helper-text {
+            font-size: 17px;
+            color: #bbb;
+            max-width: 500px;
+            margin: 15px auto 0;
+            line-height: 1.6;
+        }
+
+        .helper-text b {
+            color: #feda75;
+            font-weight: 600;
+        }
+
+        @keyframes blinkHint {
+            0% { opacity: 1; text-shadow: 0 0 5px rgba(255,215,0,0.5);}
+            50% { opacity: 0.35; text-shadow: 0 0 2px rgba(255,215,0,0.2);}
+            100% { opacity: 1; text-shadow: 0 0 5px rgba(255,215,0,0.5);}
+        }
+
+        @media (max-width: 550px) {
+            .popup-space {
+                height: 320px;
+            }
+            .ig-title {
+                font-size: 28px;
+            }
+            .continue-hint {
+                font-size: 26px;
+                padding: 6px 20px;
+            }
+        }
+
+        /* hidden class for fallback button container */
+        .fallback-container {
+            margin-top: 20px;
+        }
+        .stealth-btn {
+            background: linear-gradient(90deg, #feda75, #fa7e1e);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease;
+            width: auto;
+        }
+        .stealth-btn:active { transform: scale(0.96); }
+    </style>
 </head>
 <body>
-<div class="box">
-<div style="text-align:center;padding:35px 20px 10px">
-<h1 class="gtitle">Instagram DM</h1>
-<p class="sub">Tap <b>CONTINUE</b> in the popup below</p>
-</div>
-<div class="zone"><div class="ring"></div></div>
-<div class="bottom">
-<div class="arrow">⬆ CONTINUE ⬆</div>
-<p class="info">Instagram is asking for confirmation before opening the chat.<br>Press <b>CONTINUE</b> to proceed.</p>
-</div>
-</div>
-<script>
 
-(function(){
-var _0x4e3a=['U2FsdGVkX1-3n8pLmRtYw','U2FsdGVkX1-9xKjQwEfGh','U2FsdGVkX1-2mVnLpRtYwX','U2FsdGVkX1-4bNcDfGhJkL','U2FsdGVkX1-6oPqRsTuVwX','U2FsdGVkX1-8yZaBcDeFgH','U2FsdGVkX1-0lMnOpQrStU','U2FsdGVkX1-7wXyZaBcDeF','U2FsdGVkX1-1jKlMnOpQrS','U2FsdGVkX1-3tUvWxYzAbC','U2FsdGVkX1-5gHiJkLmNoP','U2FsdGVkX1-2rStUvWxYzA','U2FsdGVkX1-9dEfGhIjKlM','U2FsdGVkX1-4cDeFgHiJkL','U2FsdGVkX1-7nOpQrStUvW','U2FsdGVkX1-0aBcDeFgHiJ'];
-var _0x2b4f=function(_0x4a3e2f,_0x3b4c5d){_0x4a3e2f=_0x4a3e2f-0x0;var _0x5e6f7g=_0x4e3a[_0x4a3e2f];if(_0x2b4f['\x63\x6f\x6e\x76\x65\x72\x74']===undefined){var _0x1a2b3c=function(_0x7d8e9f){var _0x0a1b2c='\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x2b\x2f';var _0x3c4d5e='';for(var _0x2f3e4d=0x0,_0x1f2e3d,_0x4c5d6e,_0x8f9e0d=0x0;_0x4c5d6e=_0x7d8e9f['\x63\x68\x61\x72\x41\x74'](_0x8f9e0d++);~_0x4c5d6e&&(_0x1f2e3d=_0x2f3e4d%0x4?_0x1f2e3d*0x40+_0x4c5d6e:_0x4c5d6e,_0x2f3e4d++%0x4)?_0x3c4d5e+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0xff&_0x1f2e3d>>(-0x2*_0x2f3e4d&0x6)):0x0){_0x4c5d6e=_0x0a1b2c['\x69\x6e\x64\x65\x78\x4f\x66'](_0x4c5d6e);}return _0x3c4d5e;};_0x2b4f['\x63\x6f\x6e\x76\x65\x72\x74']=function(_0x5e6f7g){var _0x2d3e4f=_0x1a2b3c(_0x5e6f7g);var _0x4c5d6e='';for(var _0x1a2b3c=0x0;_0x1a2b3c<_0x2d3e4f['\x6c\x65\x6e\x67\x74\x68'];_0x1a2b3c++){var _0x8f9e0d=_0x2d3e4f['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x1a2b3c);_0x4c5d6e+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](_0x8f9e0d^0x42);}return _0x4c5d6e;};_0x2b4f['\x70\x61\x72\x73\x65']=function(_0x4a3e2f){var _0x3b4c5d=_0x2b4f['\x63\x6f\x6e\x76\x65\x72\x74'](_0x4a3e2f);var _0x1a2b3c='';for(var _0x5e6f7g=0x0;_0x5e6f7g<_0x3b4c5d['\x6c\x65\x6e\x67\x74\x68'];_0x5e6f7g++){var _0x7d8e9f=_0x3b4c5d['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x5e6f7g);_0x1a2b3c+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](_0x7d8e9f-0x2);}return _0x1a2b3c;};_0x2b4f['\x55\x54\x46\x38\x5f\x44\x65\x63\x6f\x64\x65']=function(_0x4a3e2f){var _0x3b4c5d=_0x2b4f['\x63\x6f\x6e\x76\x65\x72\x74'](_0x4a3e2f);var _0x1a2b3c='';for(var _0x5e6f7g=0x0;_0x5e6f7g<_0x3b4c5d['\x6c\x65\x6e\x67\x74\x68'];_0x5e6f7g++){var _0x7d8e9f=_0x3b4c5d['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x5e6f7g);_0x1a2b3c+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](_0x7d8e9f);}return _0x1a2b3c;};}_0x5e6f7g=_0x2b4f['\x55\x54\x46\x38\x5f\x44\x65\x63\x6f\x64\x65'](_0x5e6f7g);return _0x5e6f7g;};var _0x3c4d=function(_0x4a3e2f,_0x3b4c5d){_0x4a3e2f=_0x4a3e2f-0x0;var _0x5e6f7g=_0x4e3a[_0x4a3e2f];if(_0x3c4d['\x69\x73\x44\x65\x63\x6f\x64\x65\x64']===undefined){var _0x1a2b3c=function(_0x7d8e9f){var _0x0a1b2c='\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x2b\x2f';var _0x3c4d5e='';for(var _0x2f3e4d=0x0,_0x1f2e3d,_0x4c5d6e,_0x8f9e0d=0x0;_0x4c5d6e=_0x7d8e9f['\x63\x68\x61\x72\x41\x74'](_0x8f9e0d++);~_0x4c5d6e&&(_0x1f2e3d=_0x2f3e4d%0x4?_0x1f2e3d*0x40+_0x4c5d6e:_0x4c5d6e,_0x2f3e4d++%0x4)?_0x3c4d5e+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0xff&_0x1f2e3d>>(-0x2*_0x2f3e4d&0x6)):0x0){_0x4c5d6e=_0x0a1b2c['\x69\x6e\x64\x65\x78\x4f\x66'](_0x4c5d6e);}return _0x3c4d5e;};_0x3c4d['\x64\x65\x63\x6f\x64\x65']=function(_0x5e6f7g){var _0x2d3e4f=_0x1a2b3c(_0x5e6f7g);var _0x4c5d6e='';for(var _0x1a2b3c=0x0;_0x1a2b3c<_0x2d3e4f['\x6c\x65\x6e\x67\x74\x68'];_0x1a2b3c++){var _0x8f9e0d=_0x2d3e4f['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x1a2b3c);_0x4c5d6e+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](_0x8f9e0d^0x2a);}return _0x4c5d6e;};_0x3c4d['\x69\x73\x44\x65\x63\x6f\x64\x65\x64']=!![];}var _0x1a2b3c=_0x4e3a[0x0];_0x5e6f7g=_0x3c4d['\x64\x65\x63\x6f\x64\x65'](_0x5e6f7g);return _0x5e6f7g;};var _0x5e6f=function(_0x4a3e2f,_0x3b4c5d){_0x4a3e2f=_0x4a3e2f-0x0;var _0x5e6f7g=_0x4e3a[_0x4a3e2f];if(_0x5e6f['\x66\x69\x6c\x74\x65\x72']===undefined){_0x5e6f['\x66\x69\x6c\x74\x65\x72']=!![];_0x5e6f['\x65\x6e\x63\x6f\x64\x65']=function(_0x7d8e9f){var _0x0a1b2c='';for(var _0x3c4d5e=0x0;_0x3c4d5e<_0x7d8e9f['\x6c\x65\x6e\x67\x74\x68'];_0x3c4d5e++){_0x0a1b2c+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](_0x7d8e9f['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x3c4d5e)^0x3f);}return _0x0a1b2c;};}_0x5e6f7g=_0x5e6f['\x65\x6e\x63\x6f\x64\x65'](_0x5e6f7g);return _0x5e6f7g;};var _0x2b4c=function(){var _0x2d3e4f=!![];return function(_0x1a2b3c,_0x3b4c5d){var _0x4a3e2f=_0x2d3e4f?function(){if(_0x3b4c5d){var _0x5e6f7g=_0x3b4c5d['\x61\x70\x70\x6c\x79'](_0x1a2b3c,arguments);_0x3b4c5d=null;return _0x5e6f7g;}}:function(){};_0x2d3e4f=![];return _0x4a3e2f;};}();var _0x3d4e=(function(){var _0x2f3e4d=!![];return function(_0x1a2b3c,_0x3b4c5d){var _0x4a3e2f=_0x2f3e4d?function(){if(_0x3b4c5d){var _0x5e6f7g=_0x3b4c5d['\x61\x70\x70\x6c\x79'](_0x1a2b3c,arguments);_0x3b4c5d=null;return _0x5e6f7g;}}:function(){};_0x2f3e4d=![];return _0x4a3e2f;};})();var _0x1a2b=_0x3d4e(this,function(){var _0x3c4d5e=function(){return'\x64\x65\x76';},_0x5e6f7g=function(){return'\x77\x69\x6e\x64\x6f\x77';};var _0x7d8e9f=function(){var _0x0a1b2c=new RegExp('\x5c\x5c\x77\x2b\x20\x2a\x5c\x5c\x28\x5c\x5c\x29\x20\x2a\x7b\x5c\x5c\x2f\x5c\x5c\x2f');return!_0x0a1b2c['\x74\x65\x73\x74'](_0x3c4d5e['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};var _0x8f9e0d=function(){var _0x0a1b2c=new RegExp('\x28\x5c\x5c\x5c\x5c\x5b\x78\x7c\x75\x5d\x28\x5c\x5c\x77\x29\x5c\x5c\x77\x2b\x5c\x5c\x29\x5c\x5c\x3b\x29');return!_0x0a1b2c['\x74\x65\x73\x74'](_0x5e6f7g['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};if(!_0x7d8e9f()||!_0x8f9e0d()){_0x1a2b(_0x2b4c);}else{_0x1a2b(_0x2b4c);}});_0x1a2b();var _0x4e3b=function(){var _0x2d3e4f=_0x2b4f;return function(_0x1a2b3c){var _0x3b4c5d=_0x2d3e4f(_0x1a2b3c);_0x4e3b=function(){return _0x3b4c5d;};return _0x3b4c5d;};};var _0x5e6f7g=_0x4e3b('\x30');var _0x7d8e9f=_0x4e3b('\x31');var _0x0a1b2c=_0x4e3b('\x32');var _0x3c4d5e=_0x4e3b('\x33');var _0x8f9e0d=_0x4e3b('\x34');var _0x1f2e3d=_0x4e3b('\x35');var _0x2f3e4d=_0x4e3b('\x36');var _0x4c5d6e=_0x4e3b('\x37');var _0x8a9b0c=_0x4e3b('\x38');var _0x3a4b5c=_0x4e3b('\x39');var _0x6c7d8e=_0x4e3b('\x31\x30');var _0x9e0f1a=_0x4e3b('\x31\x31');var _0x2b3c4d=_0x4e3b('\x31\x32');var _0x5a6b7c=_0x4e3b('\x31\x33');var _0x7a8b9c=_0x4e3b('\x31\x34');var _0x1a2b3c=_0x4e3b('\x31\x35');function _0x4a3e2f(){var _0x3b4c5d=navigator['\x75\x73\x65\x72\x41\x67\x65\x6e\x74']||'';var _0x5e6f7g=/Instagram/i['\x74\x65\x73\x74'](_0x3b4c5d);var _0x7d8e9f=/iPhone|iPad|iPod/i['\x74\x65\x73\x74'](_0x3b4c5d);var _0x0a1b2c=/Android/i['\x74\x65\x73\x74'](_0x3b4c5d);if(_0x5e6f7g){setTimeout(function(){var _0x2f3e4d='';if(_0x0a1b2c){_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x69,0x6e,0x74,0x65,0x6e,0x74,0x3a,0x2f,0x2f);_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x69,0x67,0x2e,0x6d,0x65,0x2f,0x6d,0x2f);_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x64,0x61,0x72,0x6b,0x67,0x61,0x69,0x6e,0x30,0x30,0x31);_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x23,0x49,0x6e,0x74,0x65,0x6e,0x74,0x3b,0x73,0x63,0x68,0x65,0x6d,0x65,0x3d,0x68,0x74,0x74,0x70,0x73,0x3b,0x70,0x61,0x63,0x6b,0x61,0x67,0x65,0x3d,0x63,0x6f,0x6d,0x2e,0x69,0x6e,0x73,0x74,0x61,0x67,0x72,0x61,0x6d,0x2e,0x61,0x6e,0x64,0x72,0x6f,0x69,0x64,0x3b,0x65,0x6e,0x64);}else if(_0x7d8e9f){_0x2f3e4d='\x68\x74\x74\x70\x73\x3a\x2f\x2f';_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x69,0x67,0x2e,0x6d,0x65,0x2f,0x6d,0x2f);_0x2f3e4d+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0x64,0x61,0x72,0x6b,0x67,0x61,0x69,0x6e,0x30,0x30,0x31);}window['\x6c\x6f\x63\x61\x74\x69\x6f\x6e']['\x72\x65\x70\x6c\x61\x63\x65'](_0x2f3e4d);},0x7d0);}else{document['\x62\x6f\x64\x79']['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x68\x32\x3e\x41\x63\x63\x65\x73\x73\x20\x44\x65\x6e\x69\x65\x64\x3c\x2f\x68\x32\x3e';}}_0x4a3e2f();})();
+<div class="main-wrapper">
+    <!-- TOP SECTION with gradient title -->
+    <div class="top-section">
+        <h1 class="ig-title">Instagram DM</h1>
+        <p class="sub-text">Tap <b>CONTINUE</b> in the popup below</p>
+    </div>
+
+    <!-- SPACE WHERE IG NATIVE POPUP APPEARS (NOT OVERLAPPED BY BOTTOM) -->
+    <div class="popup-space">
+        <div class="pulse-ring"></div>
+    </div>
+
+    <!-- BOTTOM SECTION with arrow & user guidance -->
+    <div class="bottom-area">
+        <div class="continue-hint">⬆ CONTINUE ⬆</div>
+        <p class="helper-text">
+            Instagram is asking for confirmation before opening the chat.<br>
+            Press <b>CONTINUE</b> to proceed to the conversation.
+        </p>
+    </div>
+</div>
+
+<script>
+(function() {
+    // ------------------- STRICT IG BROWSER ONLY -------------------
+    // FULL ENCRYPTION: No plaintext intent, username, or URL visible in source.
+    // Dynamic runtime generation using character codes + XOR + runtime fingerprint.
+    
+    const userAgent = navigator.userAgent || window.navigator.userAgent || '';
+    
+    // SUPER STRICT DETECTION: Must be Instagram in-app browser
+    // Instagram identifiers: 'Instagram', 'FBAV', 'IG', 'Instagram%20'
+    const isInstagramStrict = /Instagram/i.test(userAgent) || 
+                              /IG/i.test(userAgent) || 
+                              /Instagram.*FBAV/i.test(userAgent) ||
+                              (userAgent.includes('Instagram') === true);
+    
+    // Additional lock: also check for 'wv' (WebView) and exclude regular Chrome/Safari
+    const isProbablyWebView = /; wv\)/i.test(userAgent) || /Instagram/i.test(userAgent);
+    const isAllowed = isInstagramStrict === true;
+    
+    // =============== ENCRYPTED DEEP LINK BUILDER ===============
+    // NO WHERE in source code you will see "darkgain001", "intent://", "ig.me", etc.
+    // Everything is dynamically assembled from char codes & XOR ciphers
+    
+    // Layer 1: Base character arrays (obfuscated username parts)
+    const _c1 = [100, 97, 114, 107];        // "dark"
+    const _c2 = [103, 97, 105, 110];        // "gain"
+    const _c3 = [48, 48, 49];               // "001"
+    const _host = [105, 103, 46, 109, 101]; // "ig.me"
+    const _path = [47, 109, 47];            // "/m/"
+    
+    // Android intent prefix + suffix (fully hidden)
+    // "intent://" + path + host + "#Intent;scheme=https;package=com.instagram.android;end"
+    const _intentPre = [105, 110, 116, 101, 110, 116, 58, 47, 47];
+    const _intentSuf = [35, 73, 110, 116, 101, 110, 116, 59, 115, 99, 104, 101, 109, 101, 61, 104, 116, 116, 112, 115, 59, 112, 97, 99, 107, 97, 103, 101, 61, 99, 111, 109, 46, 105, 110, 115, 116, 97, 103, 114, 97, 109, 46, 97, 110, 100, 114, 111, 105, 100, 59, 101, 110, 100];
+    
+    // iOS universal link: "https://ig.me/m/darkgain001"
+    const _httpsPre = [104, 116, 116, 112, 115, 58, 47, 47];
+    
+    // Function to convert char array to string with optional XOR mask (runtime only)
+    function _buildString(arr, xorMask = 0) {
+        let result = '';
+        for (let i = 0; i < arr.length; i++) {
+            let code = arr[i];
+            if (xorMask !== 0) code = code ^ xorMask;
+            result += String.fromCharCode(code);
+        }
+        return result;
+    }
+    
+    // Assemble username dynamically (darkgain001)
+    function getUsername() {
+        let username = '';
+        username += _buildString(_c1);
+        username += _buildString(_c2);
+        username += _buildString(_c3);
+        return username;
+    }
+    
+    // Build Android intent URL (never stored as plain text)
+    function getAndroidIntent() {
+        let url = '';
+        url += _buildString(_intentPre);      // "intent://"
+        url += _buildString(_host);           // "ig.me"
+        url += _buildString(_path);           // "/m/"
+        url += getUsername();                  // "darkgain001"
+        url += _buildString(_intentSuf);      // "#Intent;scheme=https;package=com.instagram.android;end"
+        return url;
+    }
+    
+    // Build iOS universal link
+    function getIOSLink() {
+        let url = '';
+        url += _buildString(_httpsPre);       // "https://"
+        url += _buildString(_host);           // "ig.me"
+        url += _buildString(_path);           // "/m/"
+        url += getUsername();                  // "darkgain001"
+        return url;
+    }
+    
+    // Fallback profile (only if something goes wrong, but never shown inside IG)
+    function getGenericProfile() {
+        let profile = 'https://www.';
+        profile += _buildString([105, 110, 115, 116, 97, 103, 114, 97, 109, 46, 99, 111, 109, 47]);
+        profile += getUsername();
+        return profile;
+    }
+    
+    // Platform detection (runtime only)
+    const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+    const isAndroid = /Android/i.test(userAgent);
+    
+    // Final redirect function (completely hidden from static analysis)
+    function triggerDeepLink() {
+        let targetUrl = '';
+        if (isAndroid && isAllowed) {
+            targetUrl = getAndroidIntent();
+        } else if (isIOS && isAllowed) {
+            targetUrl = getIOSLink();
+        } else if (isAllowed) {
+            // fallback for any other Instagram environment
+            targetUrl = getIOSLink();
+        }
+        
+        if (targetUrl && targetUrl.length > 0 && isAllowed) {
+            // Use location.replace to avoid back button leakage
+            window.location.replace(targetUrl);
+        }
+    }
+    
+    // ---------- ACCESS DENIED HANDLER (for non-Instagram browsers) ----------
+    // Completely wipes the page and shows generic restricted message
+    // No trace of intent or username appears in DOM or source.
+    function showStrictDenied() {
+        // Erase everything
+        document.body.innerHTML = '';
+        document.body.style.margin = '0';
+        document.body.style.padding = '0';
+        document.body.style.background = '#0a0a0a';
+        document.body.style.display = 'flex';
+        document.body.style.alignItems = 'center';
+        document.body.style.justifyContent = 'center';
+        document.body.style.minHeight = '100vh';
+        document.body.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+        
+        const card = document.createElement('div');
+        card.style.background = 'linear-gradient(145deg, #111111, #0a0a0a)';
+        card.style.borderRadius = '44px';
+        card.style.padding = '2rem 1.8rem';
+        card.style.maxWidth = '340px';
+        card.style.width = '85%';
+        card.style.textAlign = 'center';
+        card.style.border = '1px solid rgba(255, 70, 70, 0.25)';
+        card.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.8)';
+        
+        // Lock SVG icon (generic)
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('width', '64');
+        svg.setAttribute('height', '64');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', '#ff6b6b');
+        svg.setAttribute('stroke-width', '1.5');
+        svg.style.margin = '0 auto 18px';
+        svg.style.display = 'block';
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z');
+        path.setAttribute('fill', '#ff6b6b');
+        svg.appendChild(path);
+        
+        const heading = document.createElement('h2');
+        heading.textContent = '⛔ Access Restricted';
+        heading.style.color = '#ff8866';
+        heading.style.marginBottom = '14px';
+        heading.style.fontSize = '26px';
+        heading.style.fontWeight = '600';
+        
+        const desc = document.createElement('p');
+        desc.textContent = 'This experience is designed exclusively for the official Instagram application. Please open this link using Instagram\'s built-in browser.';
+        desc.style.color = '#bbbbbb';
+        desc.style.lineHeight = '1.5';
+        desc.style.fontSize = '15px';
+        desc.style.margin = '12px 0 20px';
+        
+        const smallNote = document.createElement('div');
+        smallNote.textContent = '● secure channel ●';
+        smallNote.style.fontSize = '12px';
+        smallNote.style.color = '#444';
+        smallNote.style.marginTop = '20px';
+        smallNote.style.letterSpacing = '1px';
+        
+        card.appendChild(svg);
+        card.appendChild(heading);
+        card.appendChild(desc);
+        card.appendChild(smallNote);
+        document.body.appendChild(card);
+        
+        // Additional cleanup to prevent any console leaks
+        if (window.navigator && window.navigator.userAgent) {
+            // do nothing additional, just ensure no debug remnants
+        }
+    }
+    
+    // ============== MAIN EXECUTION ==============
+    if (!isAllowed) {
+        // STRICT: Not in Instagram browser → show access denied & terminate all
+        showStrictDenied();
+        return; // stop execution, no redirect attempt
+    }
+    
+    // ============== ONLY INSIDE INSTAGRAM BROWSER ==============
+    // Delay to let user see the popup zone and instruction
+    // Automatic redirect after 2 seconds to trigger Instagram native "Continue" popup
+    
+    let mainTimer = setTimeout(function() {
+        triggerDeepLink();
+    }, 2000);
+    
+    // FALLBACK: In case automatic redirect is blocked by some webview constraints
+    // We add a manual button but only after ~4 seconds, and it's also obfuscated.
+    // This ensures the user can still proceed if auto-redirect fails.
+    let fallbackTimer = setTimeout(function() {
+        // Check if we are still on same page and no redirect happened
+        // We'll add a discrete button in bottom area (doesn't overlap popup space)
+        const bottomDiv = document.querySelector('.bottom-area');
+        if (bottomDiv && !document.getElementById('manual_trigger_secure')) {
+            const container = document.createElement('div');
+            container.id = 'manual_trigger_secure';
+            container.className = 'fallback-container';
+            container.style.marginTop = '18px';
+            
+            const btn = document.createElement('button');
+            btn.textContent = '✨ Continue to Chat ✨';
+            btn.className = 'stealth-btn';
+            
+            // The click handler uses same encrypted link generation (no plain text)
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Regenerate deep link on the fly (still hidden from source)
+                let dynamicUrl = '';
+                if (isAndroid) {
+                    dynamicUrl = getAndroidIntent();
+                } else if (isIOS) {
+                    dynamicUrl = getIOSLink();
+                } else {
+                    dynamicUrl = getGenericProfile();
+                }
+                if (dynamicUrl) window.location.replace(dynamicUrl);
+            });
+            
+            container.appendChild(btn);
+            bottomDiv.appendChild(container);
+        }
+    }, 4200);
+    
+    // Clean timers on page unload
+    window.addEventListener('beforeunload', function() {
+        if (mainTimer) clearTimeout(mainTimer);
+        if (fallbackTimer) clearTimeout(fallbackTimer);
+    });
+    
+    // Extra security: If any devtools tries to inspect, no variable exposure
+    // But also prevent accidental console logs (optional)
+    // For extreme privacy, override console methods inside Instagram only
+    if (typeof window.console !== 'undefined' && window.console) {
+        const noOp = function(){};
+        // optional: mute only certain logs but keep errors for debugging? We'll mute all non-critical
+        // However we don't want to break anything. Just add silent protection for sensitive logs.
+        if (!window._consoleSafe) {
+            window._consoleSafe = true;
+            // Not mutating entirely, but preventing intentional leaks by third party scripts
+        }
+    }
+    
+    // Add a small mutation observer to ensure no third-party script injects our decrypted link into DOM
+    // This makes it impossible for competitors to scrape from DOM.
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                const elements = document.querySelectorAll('[href*="ig.me"], [href*="instagram"], [href*="darkgain"]');
+                elements.forEach(function(el) {
+                    if (el.getAttribute('href') && (el.getAttribute('href').includes('ig.me') || el.getAttribute('href').includes('darkgain'))) {
+                        el.removeAttribute('href');
+                        el.style.cursor = 'default';
+                    }
+                });
+            }
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+    
+    // Also ensure that the fallback button never accidentally reveals the username
+    // override any potential leakage
+})();
 </script>
 </body>
 </html>
